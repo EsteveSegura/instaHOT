@@ -21,9 +21,7 @@ async function getNewData(){
           });
      })
 }
-(async () => {
-     let data = await getNewData()
-     console.log(data)
-})(); 
+
+
 
 module.exports = { getNewData } 
