@@ -86,3 +86,5 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+src/scraping/db/soren_helena.json
+src/scraping/cookies/soren_helena.json

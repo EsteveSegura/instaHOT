@@ -43,10 +43,10 @@ async function get(acc){
           }
      });
 }
-
+/*
 (async () =>{
      let getData = await get()
      console.log(getData)
 })();
-
-module.exports = { createNewAcc }
+*/
+module.exports = { createNewAcc, get }
