@@ -9,13 +9,17 @@ async function getCustomFeed(ig){
 
      for(let i = 0 ; i < allAccs.length ; i++){
 
-          await sleep(1)
+          await sleep(17)
           try {
                let lastPosts = await getUserRecentPosts(ig,allAccs[i].acc)
-               
                let _fullFeed = []
-               
+
+               await sleep(4)
+
                let infoUser = await getUserInfo(ig,allAccs[i].acc)
+
+               await sleep(4)
+               
                let chain = await getSimilarAccountsByUserId(ig, infoUser.pk)
                chain = chain.users.map((user) =>{
                     return user.username
