@@ -23,7 +23,26 @@ async function createNewAcc(acc){
      })
 }
 
-//get specific acc or all accs
+//Update record
+async function updateAcc(acc,newIdPicture,newUrlPicture,actualFeed,similars){
+     return new Promise(async (resolve,reject) =>{
+          let account = await get(acc);
+          if(account){
+               
+               await Acc.update({ 'acc' : acc }, {
+                    acc: acc,
+                    lastIdPicture: newIdPicture ,
+                    lastUrlPicture: newUrlPicture,
+                    actualFeed: actualFeed,
+                    similars: similars
+               });
+
+               resolve("OK")
+          }
+     })
+}
+
+//Get specific acc or all accs
 async function get(acc){
      return new Promise(async(resolve,reject) => {
           if(typeof acc == "undefined"){
@@ -43,10 +62,23 @@ async function get(acc){
           }
      });
 }
+
+async function deletePrivatesAndChanguedName(){
+     return new Promise(async(resolve,reject) => {
+          Acc.deleteMany({lastUrlPicture: "http://null.com"}, (err) =>{
+               if(err){
+                    reject(err)
+               }
+               resolve("Deleted")
+          })
+     })
+}
+
 /*
 (async () =>{
-     let getData = await get()
-     console.log(getData)
-})();
-*/
-module.exports = { createNewAcc, get }
+   let deleteAction = await deletePrivatesAndChanguedName()
+   console.log(deleteAction)
+})();*/
+
+
+module.exports = { createNewAcc, get, updateAcc }

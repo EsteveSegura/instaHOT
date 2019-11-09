@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 //Util
 const convertNewDataDb = require('./convertData')
-const accActions = require('../crud/accActions')M
+const accActions = require('../crud/accActions')
 
 //Models
 const Acc = require('../models/acc');
@@ -14,7 +14,8 @@ async function createNewRecord(acc){
      return new Promise(async(resolve,reject) => {
           let newAcc = new Acc({
                acc: acc,
-               lastIdPicture: '0'
+               lastIdPicture: '0',
+               lastUrlPicture: 'http://null.com'
           });
 
           await newAcc.save((err) => {

@@ -2,35 +2,52 @@ require('dotenv').config()
 require('tools-for-instagram');
 const accActions = require('../crud/accActions');
 
+
 async function getCustomFeed(ig){
      let allAccs = await accActions.get();
-     let lastPosts;
+     let fullFeed = [];
 
-     for(let i = 0 ; i < 12/*allAccs.length*/ ; i++){
+     for(let i = 0 ; i < allAccs.length ; i++){
+
           await sleep(1)
           try {
-               lastPosts = await getUserRecentPosts(ig,allAccs[i].acc)
-               lastPosts = Promise.all(lastPosts.map(async(posts) => {
-                    let url = await getPhotoUrl(ig,posts.pk)
-                    let objFeed = {
-                         acc: allAccs[i].acc,
-                         id: posts.pk,
-                         url: url
-                    }
-                    return objFeed
-               }))
+               let lastPosts = await getUserRecentPosts(ig,allAccs[i].acc)
+               
+               let _fullFeed = []
+               
+               let infoUser = await getUserInfo(ig,allAccs[i].acc)
+               let chain = await getSimilarAccountsByUserId(ig, infoUser.pk)
+               chain = chain.users.map((user) =>{
+                    return user.username
+               })
+
+               let objFeed = {
+                    acc: allAccs[i].acc,
+                    id: lastPosts[0].pk,
+                    url: await getPhotoUrl(ig,lastPosts[0].pk)
+               }
+
+               for(let z = 0 ; z < lastPosts.length ;z++){
+                    _fullFeed.push({
+                         id: lastPosts[z].pk,
+                         url: await getPhotoUrl(ig,lastPosts[z].pk)
+                    })
+               }
+               let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
+               fullFeed.push(objFeed)
           } catch (error) {
                console.log(error)               
           }
      }
 
-     return lastPosts
+     return fullFeed
 }
 
 (async () => {
      let ig = await login();
      let feed = await getCustomFeed(ig)
      console.log(feed)
+ 
 
      /*let infoUser = await getUserInfo(ig,"cintiaroldan_11")
      let similars = await getSimilarAccountsByUserId(ig, infoUser.pk)
