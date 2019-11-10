@@ -28,13 +28,14 @@ async function updateAcc(acc,newIdPicture,newUrlPicture,actualFeed,similars){
      return new Promise(async (resolve,reject) =>{
           let account = await get(acc);
           if(account){
-               
+
+
                await Acc.update({ 'acc' : acc }, {
                     acc: acc,
                     lastIdPicture: newIdPicture ,
                     lastUrlPicture: newUrlPicture,
                     actualFeed: actualFeed,
-                    similars: similars
+                    similars: similars || account.similars
                });
 
                resolve("OK")

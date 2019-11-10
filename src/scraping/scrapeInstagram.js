@@ -1,36 +1,37 @@
 require('dotenv').config()
-require('tools-for-instagram');
+const axios = require('axios');
 const accActions = require('../crud/accActions');
+const utils = require('../utils/utils');
 
 
-async function getCustomFeed(ig){
+async function getCustomFeedNative(ig){
      let allAccs = await accActions.get();
      let fullFeed = [];
-
+     
      for(let i = 0 ; i < allAccs.length ; i++){
-
+          
           await sleep(17)
           try {
                let lastPosts = await getUserRecentPosts(ig,allAccs[i].acc)
                let _fullFeed = []
-
-               await sleep(4)
-
+               
+               await sleep(9)
+               
                let infoUser = await getUserInfo(ig,allAccs[i].acc)
-
-               await sleep(4)
+               
+               await sleep(13)
                
                let chain = await getSimilarAccountsByUserId(ig, infoUser.pk)
                chain = chain.users.map((user) =>{
                     return user.username
                })
-
+               
                let objFeed = {
                     acc: allAccs[i].acc,
                     id: lastPosts[0].pk,
                     url: await getPhotoUrl(ig,lastPosts[0].pk)
                }
-
+               
                for(let z = 0 ; z < lastPosts.length ;z++){
                     _fullFeed.push({
                          id: lastPosts[z].pk,
@@ -43,18 +44,57 @@ async function getCustomFeed(ig){
                console.log(error)               
           }
      }
-
      return fullFeed
 }
 
-(async () => {
-     let ig = await login();
-     let feed = await getCustomFeed(ig)
-     console.log(feed)
- 
+async function getCustomFeedWeb(){
+     return new Promise(async(resolve,reject) => {
+          let allAccs = await accActions.get();
+          for(let i = 0 ; i < allAccs.length ; i++){
+               try {
+                    console.log(allAccs[i].acc)
+                    const config = {
+                         method: 'get',
+                         url: `https://instagram.com/${allAccs[i].acc}/?__a=1`,
+                         headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
+                    }
+                    let instagramResponse = await axios(config);
+                    console.log(instagramResponse)
+                    console.log(`https://instagram.com/${allAccs[i].acc}/?__a=1`)
+                    let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
+                    lastFeedPosts = lastFeedPosts.map((posts) => {
+                         return{
+                              id : posts.node.id,
+                              url : posts.node.display_url
+                         }
+                    })
+                    console.log(lastFeedPosts[0])
+                    let updateAcc = await accActions.updateAcc(allAccs[i].acc, lastFeedPosts[0].id, lastFeedPosts[0].url, lastFeedPosts)
+                    console.log(updateAcc)
+                    await utils.delay(1);
+               } catch (error) {
+                    //console.log("fail ops!")
+                    console.log(error)
+               }
+          }
+          resolve("Done")
+          //console.log(allAccs)
+     })
+}
 
-     /*let infoUser = await getUserInfo(ig,"cintiaroldan_11")
-     let similars = await getSimilarAccountsByUserId(ig, infoUser.pk)
-     console.log(similars);*/
+
+(async () => {
+     native = true;
+     if(native){
+          require('tools-for-instagram');
+          let ig = await login();
+          let feed = await getCustomFeed(ig)
+          console.log(feed)
+
+     }else{
+          let feed = await getCustomFeedWeb()
+          console.log(feed)
+     }
+
      
 })();
