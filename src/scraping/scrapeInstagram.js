@@ -88,7 +88,7 @@ async function getCustomFeedWeb(){
      if(native){
           require('tools-for-instagram');
           let ig = await login();
-          let feed = await getCustomFeed(ig)
+          let feed = await getCustomFeedNative(ig)
           console.log(feed)
 
      }else{
