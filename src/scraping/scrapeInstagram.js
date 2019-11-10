@@ -2,6 +2,7 @@ require('dotenv').config()
 const axios = require('axios');
 const accActions = require('../crud/accActions');
 const utils = require('../utils/utils');
+const download = require('../utils/downloadPicture')
 
 
 async function getCustomFeedNative(ig){
@@ -34,10 +35,11 @@ async function getCustomFeedNative(ig){
 
                //Download
                console.log(`db Acc: ${allAccs[i].lastIdPicture} - post actual in instagram: ${lastPosts[0].pk}`)
-               if(allAccs[i].lastIdPicture == lastPosts[2].pk ){
-                    console.log('same')
+               if(allAccs[i].lastIdPicture == lastPosts[0].pk ){
+                    console.log('No new pictures')
                }else{
-                    console.log('not the same')
+                    console.log('New pictures')
+                    await download.downloadImage(objFeed.url)
                }
                
                for(let z = 0 ; z < lastPosts.length ;z++){
@@ -47,7 +49,7 @@ async function getCustomFeedNative(ig){
                     })
                }
 
-               //let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
+               let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
 
                fullFeed.push(objFeed)
 

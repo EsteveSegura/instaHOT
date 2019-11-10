@@ -4,7 +4,7 @@ const axios = require('axios')
 async function downloadImage(url){
      axios.get(url, {responseType: "stream"} )  
      .then(response => {  
-         response.data.pipe(fs.createWriteStream(`IMG_${Date.now()}.jpg`));  
+         response.data.pipe(fs.createWriteStream(`../tmp/IMG_${Date.now()}.jpg`));  
      })  
      .catch(error => {  
          console.log(error);  
