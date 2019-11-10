@@ -47,7 +47,7 @@ async function getCustomFeedNative(ig){
                     })
                }
 
-               let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
+               //let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
 
                fullFeed.push(objFeed)
 
