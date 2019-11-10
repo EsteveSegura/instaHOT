@@ -38,5 +38,5 @@ setInterval(() => {
                donwload.deleteImage(`./tmp/${files[0]}`)
           }, 1000);
      }
-}, 6000/*60000*5*/);
+}, 60000*5);
 
