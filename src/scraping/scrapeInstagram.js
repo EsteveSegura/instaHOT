@@ -31,6 +31,12 @@ async function getCustomFeedNative(ig){
                     id: lastPosts[0].pk,
                     url: await getPhotoUrl(ig,lastPosts[0].pk)
                }
+
+               //Download
+               console.log(`db Acc: ${allAccs[i].lastIdPicture} - post actual in instagram: ${lastPosts[0].pk}`)
+               if(allAccs[i].lastIdPicture == lastPosts[0].pk ){
+                    console.log('same')
+               }
                
                for(let z = 0 ; z < lastPosts.length ;z++){
                     _fullFeed.push({
@@ -38,8 +44,11 @@ async function getCustomFeedNative(ig){
                          url: await getPhotoUrl(ig,lastPosts[z].pk)
                     })
                }
+
                let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
+
                fullFeed.push(objFeed)
+
           } catch (error) {
                console.log(error)               
           }
