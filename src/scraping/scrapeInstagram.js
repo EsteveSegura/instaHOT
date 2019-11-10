@@ -36,6 +36,8 @@ async function getCustomFeedNative(ig){
                console.log(`db Acc: ${allAccs[i].lastIdPicture} - post actual in instagram: ${lastPosts[0].pk}`)
                if(allAccs[i].lastIdPicture == lastPosts[0].pk ){
                     console.log('same')
+               }else{
+                    console.log('not the same')
                }
                
                for(let z = 0 ; z < lastPosts.length ;z++){
