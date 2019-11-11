@@ -97,18 +97,18 @@ async function getCustomFeedWeb(){
 
 
 (async () => {
-     native = true;
-     if(native){
-          require('tools-for-instagram');
-          let ig = await login();
-          await setAntiBanMode(ig);
-          let feed = await getCustomFeedNative(ig)
-          console.log(feed)
-
-     }else{
-          let feed = await getCustomFeedWeb()
-          console.log(feed)
-     }
-
+     while(true){
+          native = true;
+          if(native){
+               require('tools-for-instagram');
+               let ig = await login();
+               await setAntiBanMode(ig);
+               let feed = await getCustomFeedNative(ig)
+               console.log(feed)
      
+          }else{
+               let feed = await getCustomFeedWeb()
+               console.log(feed)
+          }
+     }
 })();
