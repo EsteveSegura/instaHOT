@@ -50,7 +50,9 @@ async function getCustomFeedNative(ig){
                     })
                }
                //SIMILARS
-               await createSimilar(1)
+               if(Math.random() < 0.7){
+                    await createSimilar(1)
+               }
 
 
                let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
@@ -71,17 +73,16 @@ async function getCustomFeedWeb(save = true){
      
           let allAccs = await accActions.get();
           for(let i = 0 ; i < allAccs.length ; i++){
-               let random = utils.randomInt(0,allAccs.length);
                try {
                     console.log(allAccs[i].acc)
                     const config = {
                          method: 'get',
-                         url: `https://instagram.com/${allAccs[random].acc}/?__a=1`,
+                         url: `https://instagram.com/${allAccs[i].acc}/?__a=1`,
                          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
                     }
                     let instagramResponse = await axios(config);
                     console.log(instagramResponse)
-                    console.log(`https://instagram.com/${allAccs[random].acc}/?__a=1`)
+                    console.log(`https://instagram.com/${allAccs[i].acc}/?__a=1`)
                     let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
                     lastFeedPosts = lastFeedPosts.map((posts) => {
                          return{
@@ -90,7 +91,7 @@ async function getCustomFeedWeb(save = true){
                          }
                     })
                     console.log(lastFeedPosts[0])
-                    let updateAcc = await accActions.updateAcc(allAccs[random].acc, lastFeedPosts[0].id, lastFeedPosts[0].url, lastFeedPosts)
+                    let updateAcc = await accActions.updateAcc(allAccs[i].acc, lastFeedPosts[0].id, lastFeedPosts[0].url, lastFeedPosts)
                     console.log(updateAcc)
                     await utils.delay(1);
                } catch (error) {
@@ -106,14 +107,15 @@ async function createSimilar(howMany){
      return new Promise(async(resolve,reject) => {
           let allAccs = await accActions.getAllSimilar();
           for(let i = 0 ; i < howMany ; i++){
+               let random = utils.randomInt(0,allAccs.length);
                try {
                     const config = {
                          method: 'get',
-                         url: `https://instagram.com/${allAccs[i]}/?__a=1`,
+                         url: `https://instagram.com/${allAccs[random]}/?__a=1`,
                          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
                     }
                     let instagramResponse = await axios(config);
-                    console.log(`https://instagram.com/${allAccs[i]}/?__a=1`)
+                    console.log(`https://instagram.com/${allAccs[random]}/?__a=1`)
                     let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
                     lastFeedPosts = lastFeedPosts.map((posts) => {
                          return{
@@ -121,7 +123,7 @@ async function createSimilar(howMany){
                               url : posts.node.display_url
                          }
                     })
-                    let addSimilar = await similarActions.craeteSimilar(allAccs[i],lastFeedPosts)
+                    let addSimilar = await similarActions.craeteSimilar(allAccs[random],lastFeedPosts)
                     console.log(addSimilar)
                     await utils.delay(9);
                } catch (error) {
@@ -136,8 +138,8 @@ async function createSimilar(howMany){
 
 (async () => {
      while(true){
+
           native = true;
-         
           if(native){
                require('tools-for-instagram');
                let ig = await login();
@@ -149,8 +151,5 @@ async function createSimilar(howMany){
                let feed = await getCustomFeedWeb()
                console.log(feed)
           }
-
-
-
      }
 })();

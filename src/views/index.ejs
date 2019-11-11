@@ -11,14 +11,17 @@
 
 <body>
      <h1>Working!</h1>
-     <h3 id="acc"><%= profile.username %></h3>
-     <button onclick="addNewRecord()">ADD</button><br>
-     <% profile.pictures.forEach((list) =>{ %>
-          <img src="<%= list.picture %>" width="200">
-     <%})%>
+     <% for( let i = 0 ; i < 12 ; i++){ %>
+          <div class="card">
+               <h4><%= profiles[i].acc %></h4>
+               <% for( let z = 0 ; z < profiles[i].actualFeed.length; z++){ %>          
+                    <img src="<%= profiles[i].actualFeed[z].url %>" width="100">
+               <%}%>               
+          </div>
+     <%}%>
      <script>
           function addNewRecord(){
-               axios.get('/add/<%= profile.username %>').then(function (response) {
+               axios.get('/add/asdasdasdasd').then(function (response) {
                     console.log(response);
                }).catch(function (error) {
                     console.log(error);

@@ -3,15 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 const accActions = require('../crud/accActions');
+const similarActions = require('../crud/similarsActions');
 const utils = require('../utils/utils')
 
 
 router.get('/', async (req,res) => {
-     let allSimilars = await accActions.getAllSimilar()
-     console.log(allSimilars.length)
-     let callingApi = await axios.get(`http://girlazo.com/instagramapi/user/${allSimilars[utils.randomInt(0,allSimilars.length)]}/`)
+     console.log("s")
+     let allSimilars = await similarActions.get()
+     console.log(allSimilars)
      res.render('index.ejs',{
-          profile : callingApi.data
+          profiles : allSimilars
      })
 });
 

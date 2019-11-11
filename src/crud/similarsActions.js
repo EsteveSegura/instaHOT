@@ -15,7 +15,7 @@ async function get(acc){
                     if(err){
                          reject(err)
                     }
-                    resolve(accs)
+                    resolve(similars)
                });
           }else{
                Similars.findOne({acc: acc}, (err,similars) => {
