@@ -68,18 +68,20 @@ async function getCustomFeedNative(ig){
 
 async function getCustomFeedWeb(save = true){
      return new Promise(async(resolve,reject) => {
+     
           let allAccs = await accActions.get();
           for(let i = 0 ; i < allAccs.length ; i++){
+               let random = utils.randomInt(0,allAccs.length);
                try {
                     console.log(allAccs[i].acc)
                     const config = {
                          method: 'get',
-                         url: `https://instagram.com/${allAccs[i].acc}/?__a=1`,
+                         url: `https://instagram.com/${allAccs[random].acc}/?__a=1`,
                          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
                     }
                     let instagramResponse = await axios(config);
                     console.log(instagramResponse)
-                    console.log(`https://instagram.com/${allAccs[i].acc}/?__a=1`)
+                    console.log(`https://instagram.com/${allAccs[random].acc}/?__a=1`)
                     let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
                     lastFeedPosts = lastFeedPosts.map((posts) => {
                          return{
@@ -88,7 +90,7 @@ async function getCustomFeedWeb(save = true){
                          }
                     })
                     console.log(lastFeedPosts[0])
-                    let updateAcc = await accActions.updateAcc(allAccs[i].acc, lastFeedPosts[0].id, lastFeedPosts[0].url, lastFeedPosts)
+                    let updateAcc = await accActions.updateAcc(allAccs[random].acc, lastFeedPosts[0].id, lastFeedPosts[0].url, lastFeedPosts)
                     console.log(updateAcc)
                     await utils.delay(1);
                } catch (error) {
