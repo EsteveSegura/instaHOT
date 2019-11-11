@@ -1,6 +1,7 @@
 require('dotenv').config()
 const axios = require('axios');
 const accActions = require('../crud/accActions');
+const similarActions = require('../crud/similarsActions');
 const utils = require('../utils/utils');
 const download = require('../utils/downloadPicture')
 
@@ -48,6 +49,9 @@ async function getCustomFeedNative(ig){
                          url: await getPhotoUrl(ig,lastPosts[z].pk)
                     })
                }
+               //SIMILARS
+               await createSimilar(1)
+
 
                let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
 
@@ -60,7 +64,9 @@ async function getCustomFeedNative(ig){
      return fullFeed
 }
 
-async function getCustomFeedWeb(){
+
+
+async function getCustomFeedWeb(save = true){
      return new Promise(async(resolve,reject) => {
           let allAccs = await accActions.get();
           for(let i = 0 ; i < allAccs.length ; i++){
@@ -86,29 +92,63 @@ async function getCustomFeedWeb(){
                     console.log(updateAcc)
                     await utils.delay(1);
                } catch (error) {
-                    //console.log("fail ops!")
                     console.log(error)
                }
           }
           resolve("Done")
           //console.log(allAccs)
-     })
+     });
 }
+
+async function createSimilar(howMany){
+     return new Promise(async(resolve,reject) => {
+          let allAccs = await accActions.getAllSimilar();
+          for(let i = 0 ; i < howMany ; i++){
+               try {
+                    const config = {
+                         method: 'get',
+                         url: `https://instagram.com/${allAccs[i]}/?__a=1`,
+                         headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
+                    }
+                    let instagramResponse = await axios(config);
+                    console.log(`https://instagram.com/${allAccs[i]}/?__a=1`)
+                    let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
+                    lastFeedPosts = lastFeedPosts.map((posts) => {
+                         return{
+                              id : posts.node.id,
+                              url : posts.node.display_url
+                         }
+                    })
+                    let addSimilar = await similarActions.craeteSimilar(allAccs[i],lastFeedPosts)
+                    console.log(addSimilar)
+                    await utils.delay(9);
+               } catch (error) {
+                    console.log(error)
+               }
+          }
+          resolve("Done")
+     });
+}
+
 
 
 (async () => {
      while(true){
           native = true;
+         
           if(native){
                require('tools-for-instagram');
                let ig = await login();
                await setAntiBanMode(ig);
-               let feed = await getCustomFeedNative(ig)
-               console.log(feed)
+
+               let feed = await getCustomFeedNative(ig);
      
           }else{
                let feed = await getCustomFeedWeb()
                console.log(feed)
           }
+
+
+
      }
 })();

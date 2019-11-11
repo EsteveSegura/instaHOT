@@ -9,17 +9,22 @@ mongoose.connect('mongodb://localhost/instahot', { useNewUrlParser: true, useUni
 //Create new record
 async function createNewAcc(acc){
      return new Promise(async(resolve,reject) => {
-          let newAcc = new Acc({
-               acc: acc,
-               lastIdPicture: '0'
-          });
-
-          await newAcc.save((err) => {
-               if (err) {
-                    reject('error_on_create');
-               }
-               resolve(`new acc on database: ${acc}`);
-          });
+          let exists = await get(acc)
+          if(exists == null){
+               let newAcc = new Acc({
+                    acc: acc,
+                    lastIdPicture: '0'
+               });
+     
+               await newAcc.save((err) => {
+                    if (err) {
+                         reject('error_on_create');
+                    }
+                    resolve(`new acc on database: ${acc}`);
+               });
+          }else{
+               resolve(`@${acc} : already exists`)
+          }
      })
 }
 
@@ -75,11 +80,29 @@ async function deletePrivatesAndChanguedName(){
      })
 }
 
-/*
+async function getAllSimilar(){
+     return new Promise(async(resolve,reject) => { 
+          let allAccs = await get();
+          let allSimilars = allAccs.map((users) =>{
+               return users.similars
+          });
+          allSimilars = [].concat(...allSimilars)
+          resolve(allSimilars)
+     });
+}
+
+
+
 (async () =>{
-   let deleteAction = await deletePrivatesAndChanguedName()
-   console.log(deleteAction)
-})();*/
+     //let d = await createNewAcc("rang92_")
+     //console.log(d)
+
+     //let AllSimilars = await getAllSimilar()
+     //console.log(AllSimilars)
+
+     /*let deleteAction = await deletePrivatesAndChanguedName()
+     console.log(deleteAction)*/
+})();
 
 
-module.exports = { createNewAcc, get, updateAcc }
+module.exports = { createNewAcc, get, updateAcc, deletePrivatesAndChanguedName, getAllSimilar}

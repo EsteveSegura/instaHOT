@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 //Util
 const convertNewDataDb = require('./convertData')

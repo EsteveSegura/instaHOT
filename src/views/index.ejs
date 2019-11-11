@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+     <title>Hi </title>
+</head>
+
+<body>
+     <h1>Working!</h1>
+     <h3 id="acc"><%= profile.username %></h3>
+     <button onclick="addNewRecord()">ADD</button><br>
+     <% profile.pictures.forEach((list) =>{ %>
+          <img src="<%= list.picture %>" width="200">
+     <%})%>
+     <script>
+          function addNewRecord(){
+               axios.get('/add/<%= profile.username %>').then(function (response) {
+                    console.log(response);
+               }).catch(function (error) {
+                    console.log(error);
+               });
+          }
+     </script>
+</body>
+
+</html>
