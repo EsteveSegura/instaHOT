@@ -50,7 +50,7 @@ async function getCustomFeedNative(ig) {
                     })
                }
                //SIMILARS
-               if (Math.random() < 0.85) {
+               if (Math.random() > 0.85) {
                     await createSimilar()
                     console.log("Generando similar")
                } else {
