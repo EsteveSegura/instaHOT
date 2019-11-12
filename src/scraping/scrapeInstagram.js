@@ -106,31 +106,36 @@ async function getCustomFeedWeb(save = true){
 async function createSimilar(howMany){
      return new Promise(async(resolve,reject) => {
           let allAccs = await accActions.getAllSimilar();
-          for(let i = 0 ; i < howMany ; i++){
-               let random = utils.randomInt(0,allAccs.length);
-               try {
-                    const config = {
-                         method: 'get',
-                         url: `https://instagram.com/${allAccs[random]}/?__a=1`,
-                         headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
-                    }
-                    let instagramResponse = await axios(config);
-                    console.log(`https://instagram.com/${allAccs[random]}/?__a=1`)
-                    let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
-                    lastFeedPosts = lastFeedPosts.map((posts) => {
-                         return{
-                              id : posts.node.id,
-                              url : posts.node.display_url
+          if(process.env.SCRAPE_SIMILARS == "true"){
+               console.log("SCRAPING SIMILARS")
+               for(let i = 0 ; i < howMany ; i++){
+                    let random = utils.randomInt(0,allAccs.length);
+                    try {
+                         const config = {
+                              method: 'get',
+                              url: `https://instagram.com/${allAccs[random]}/?__a=1`,
+                              headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36' }
                          }
-                    })
-                    let addSimilar = await similarActions.craeteSimilar(allAccs[random],lastFeedPosts)
-                    console.log(addSimilar)
-                    await utils.delay(9);
-               } catch (error) {
-                    console.log(error)
+                         let instagramResponse = await axios(config);
+                         console.log(`https://instagram.com/${allAccs[random]}/?__a=1`)
+                         let lastFeedPosts = instagramResponse.data.graphql.user.edge_owner_to_timeline_media.edges
+                         lastFeedPosts = lastFeedPosts.map((posts) => {
+                              return{
+                                   id : posts.node.id,
+                                   url : posts.node.display_url
+                              }
+                         })
+                         let addSimilar = await similarActions.craeteSimilar(allAccs[random],lastFeedPosts)
+                         console.log(addSimilar)
+                         await utils.delay(9);
+                    } catch (error) {
+                         console.log(error)
+                    }
                }
+               resolve("Done")
+          }else{
+               resolve("Fail")
           }
-          resolve("Done")
      });
 }
 
