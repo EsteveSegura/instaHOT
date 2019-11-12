@@ -52,9 +52,9 @@ async function getCustomFeedNative(ig) {
                //SIMILARS
                if (Math.random() < 0.85) {
                     await createSimilar()
-                    console.log("Generando similar1")
+                    console.log("Generando similar")
                } else {
-
+                    console.log("NO generando similar")
                }
 
 
