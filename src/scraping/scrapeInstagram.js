@@ -40,7 +40,7 @@ async function getCustomFeedNative(ig){
                     console.log('No new pictures')
                }else{
                     console.log('New pictures')
-                    await download.downloadImage(objFeed.url)
+                    await download.downloadImage(objFeed.url,objFeed.acc)
                }
                
                for(let z = 0 ; z < lastPosts.length ;z++){

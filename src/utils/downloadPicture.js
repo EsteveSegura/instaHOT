@@ -1,10 +1,10 @@
 const fs = require('fs')
 const axios = require('axios')
 
-async function downloadImage(url){
+async function downloadImage(url,name){
      axios.get(url, {responseType: "stream"} )  
      .then(response => {  
-         response.data.pipe(fs.createWriteStream(`../tmp/IMG_${Date.now()}.jpg`));  
+         response.data.pipe(fs.createWriteStream(`../tmp/${name}_ig_IMG_${Date.now()}.jpg`));  
      })  
      .catch(error => {  
          console.log(error);  

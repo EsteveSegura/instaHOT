@@ -32,6 +32,13 @@ function readFolder(){
 setInterval(() => {
      let files = readFolder()
      if(files.length != 0){
+          let urlBase = "https://instagram.com/"
+          try {
+               let urlUser = files[0].split('_ig_')[0]
+               console.log(`full URL : ${urlBase}${urlUser}`)
+          } catch (error) {
+               console.log(`NO URL FINDED`)
+          }
           bot.sendPhoto("-1001325433576",`./tmp/${files[0]}`)
           console.log('sending pictures')
           setTimeout(() => {

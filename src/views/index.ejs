@@ -11,7 +11,7 @@
 
 <body>
      <h1>Working!</h1>
-     <% for( let i = 0 ; i < 2 ; i++){ %>
+     <% for( let i = 0 ; i < 5 ; i++){ %>
           <div class="card" id="<%= profiles[i].acc %>">
                <h4><%= profiles[i].acc %></h4>
                <button  onclick='addNewRecord("<%= profiles[i].acc %>")'>ADD</button>  <button onclick='deleteRecord("<%= profiles[i].acc %>")'>DELETE</button><br>
@@ -21,9 +21,7 @@
           </div>
      <%}%>
      <script>
-          function warn(acc){
-               alert(acc)
-          }
+
           function addNewRecord(acc){
                
                axios.get(`/add/${acc}`).then(function (response) {
