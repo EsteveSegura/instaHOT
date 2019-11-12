@@ -49,4 +49,18 @@ async function craeteSimilar(acc,actualFeed){
      });
 }
 
-module.exports = { get, craeteSimilar }
+async function similarAdd(acc){
+     return new Promise(async (resolve,reject) => {
+          let getSimilar = await get(acc)
+
+          await Similars.update({acc: acc},{
+               acc: acc,
+               actualFeed: getSimilar.actualFeed,
+               added: true
+          })
+
+          resolve(getSimilar)
+     })
+}
+
+module.exports = { get, craeteSimilar, similarAdd }

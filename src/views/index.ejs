@@ -11,21 +11,42 @@
 
 <body>
      <h1>Working!</h1>
-     <% for( let i = 0 ; i < 12 ; i++){ %>
-          <div class="card">
+     <% for( let i = 0 ; i < 2 ; i++){ %>
+          <div class="card" id="<%= profiles[i].acc %>">
                <h4><%= profiles[i].acc %></h4>
+               <button  onclick='addNewRecord("<%= profiles[i].acc %>")'>ADD</button>  <button onclick='deleteRecord("<%= profiles[i].acc %>")'>DELETE</button><br>
                <% for( let z = 0 ; z < profiles[i].actualFeed.length; z++){ %>          
                     <img src="<%= profiles[i].actualFeed[z].url %>" width="100">
                <%}%>               
           </div>
      <%}%>
      <script>
-          function addNewRecord(){
-               axios.get('/add/asdasdasdasd').then(function (response) {
+          function warn(acc){
+               alert(acc)
+          }
+          function addNewRecord(acc){
+               
+               axios.get(`/add/${acc}`).then(function (response) {
                     console.log(response);
                }).catch(function (error) {
                     console.log(error);
                });
+               deleteHtml(acc)
+          }
+
+          function deleteRecord(acc){
+               axios.get(`/add/${acc}`).then(function (response) {
+                    console.log(response);
+               }).catch(function (error) {
+                    console.log(error);
+               });
+               deleteHtml(acc)
+          }
+
+          function deleteHtml(id){
+               let el = document.getElementById(id)
+               el.parentNode.removeChild(el)
+
           }
      </script>
 </body>

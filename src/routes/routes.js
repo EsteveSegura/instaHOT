@@ -8,20 +8,25 @@ const utils = require('../utils/utils')
 
 
 router.get('/', async (req,res) => {
-     console.log("s")
      let allSimilars = await similarActions.get()
-     console.log(allSimilars)
      res.render('index.ejs',{
           profiles : allSimilars
      })
 });
 
 
-
 router.get('/add/:acc', async (req,res) => {
      let add = await accActions.createNewAcc(req.params.acc)
+     let similar = await similarActions.similarAdd(req.params.acc)
+     console.log(similar)
      console.log(req.params.acc)
      res.json({'message' : add})
+});
+
+router.get('/delete/:acc', async (req,res) => {
+     let similar = await similarActions.similarAdd(req.params.acc)
+     console.log(req.params.acc)
+     res.json({'message' : "DELETED"})
 });
 
 module.exports = router;
