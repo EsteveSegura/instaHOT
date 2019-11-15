@@ -66,7 +66,7 @@ async function getCustomFeedNative(ig) {
                if(error == "IgExactUserNotFoundError: User with exact username not found."){
                     accActions.deleteAcc(allAccs[i].acc)
                     console.log("Borrando: no existe")
-               }else if(error.startsWith("IgPrivateUserError:")){
+               }else if(error.toString().startsWith("IgPrivateUserError:")){
                     accActions.deleteAcc(allAccs[i].acc)
                     console.log("Borrando: perfil privado")
                }
