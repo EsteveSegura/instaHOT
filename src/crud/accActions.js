@@ -69,6 +69,17 @@ async function get(acc){
      });
 }
 
+async function deleteAcc(acc){
+     return new Promise(async(resolve,reject) => {
+          Acc.deleteOne({acc: acc}, (err) =>{
+               if(err){
+                    console.log(err)
+               }
+               resolve("Deleted")
+          })
+     });
+}
+
 async function deletePrivatesAndChanguedName(){
      return new Promise(async(resolve,reject) => {
           Acc.deleteMany({lastUrlPicture: "http://null.com"}, (err) =>{
@@ -105,4 +116,4 @@ async function getAllSimilar(){
 })();
 
 
-module.exports = { createNewAcc, get, updateAcc, deletePrivatesAndChanguedName, getAllSimilar}
+module.exports = { createNewAcc, deleteAcc, get, updateAcc, deletePrivatesAndChanguedName, getAllSimilar}

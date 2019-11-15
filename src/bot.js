@@ -3,6 +3,8 @@ const TelegramBot = require('node-telegram-bot-api');
 const donwload = require('./utils/downloadPicture');
 const fs = require('fs')
 
+
+const utils = require('./utils/utils')
 const token = process.env.TELEGRAM_TOKEN
 
 // Create a bot that uses 'polling' to fetch new updates
@@ -32,16 +34,17 @@ function readFolder() {
 setInterval(() => {
      let files = readFolder()
      if (files.length != 0) {
+          let radNumber = utils.randomInt(0,files.length)
           let urlBase = "https://instagram.com/"
-          let urlUser = files[0].split('_ig_')[0]
-          if(files[0].includes('_ig_')){
-               bot.sendPhoto("-1001325433576", `./tmp/${files[0]}`, { caption: `profile : ${urlBase}${urlUser}` })
+          let urlUser = files[radNumber].split('_ig_')[0]
+          if(files[radNumber].includes('_ig_')){
+               bot.sendPhoto("-1001325433576", `./tmp/${files[radNumber]}`, { caption: `profile : ${urlBase}${urlUser}` })
           }else{
-               bot.sendPhoto("-1001325433576", `./tmp/${files[0]}`)
+               bot.sendPhoto("-1001325433576", `./tmp/${files[radNumber]}`)
           }
           console.log('sending pictures')
           setTimeout(() => {
-               donwload.deleteImage(`./tmp/${files[0]}`)
+               donwload.deleteImage(`./tmp/${files[radNumber]}`)
           }, 1000);
      }
 }, 60000 * 5);

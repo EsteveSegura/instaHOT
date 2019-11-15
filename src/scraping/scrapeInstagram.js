@@ -63,6 +63,12 @@ async function getCustomFeedNative(ig) {
                fullFeed.push(objFeed)
 
           } catch (error) {
+               console.log("AQUI PASA UN ERROR")
+               if(error == "IgExactUserNotFoundError: User with exact username not found."){
+                    console.log("Es lo que yo espera")
+               }else{
+                    console.log("El error no es lo que yo esperaba")
+               }
                console.log(error)
           }
      }
