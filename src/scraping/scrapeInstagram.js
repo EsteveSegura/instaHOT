@@ -50,13 +50,14 @@ async function getCustomFeedNative(ig) {
                     })
                }
                //SIMILARS
+               await createSimilar() //Generar similar cada mins
+               console.log("Generando similar")
+               /*
                if (Math.random() > 0.85) {
-                    await createSimilar()
-                    console.log("Generando similar")
                } else {
                     console.log("NO generando similar")
                }
-
+               */
 
                let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
 
