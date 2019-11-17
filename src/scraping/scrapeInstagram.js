@@ -63,14 +63,14 @@ async function getCustomFeedNative(ig) {
                fullFeed.push(objFeed)
 
           } catch (error) {
-               if(error == "IgExactUserNotFoundError: User with exact username not found."){
+               if (error == "IgExactUserNotFoundError: User with exact username not found.") {
                     accActions.deleteAcc(allAccs[i].acc)
                     console.log("Borrando: no existe")
-               }else if(error.toString().startsWith("IgPrivateUserError:")){
+               } else if (error.toString().startsWith("IgPrivateUserError:")) {
                     accActions.deleteAcc(allAccs[i].acc)
                     console.log("Borrando: perfil privado")
                }
-               
+
           }
      }
      return fullFeed
@@ -156,18 +156,10 @@ async function createSimilar() {
 
 
 (async () => {
+     require('tools-for-instagram'); // MOVE THIS TOP
+     let ig = await login(); // MOVE THIS TOP
      while (true) {
-
-          native = true;
-          if (native) {
-               require('tools-for-instagram');
-               let ig = await login();
-               await setAntiBanMode(ig);
-               let feed = await getCustomFeedNative(ig);
-
-          } else {
-               
-               console.log(feed)
-          }
+          await setAntiBanMode(ig); // MOVE THIS TOP
+          let feed = await getCustomFeedNative(ig);
      }
 })();
