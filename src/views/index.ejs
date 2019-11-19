@@ -33,7 +33,7 @@
           }
 
           function deleteRecord(acc){
-               axios.get(`/add/${acc}`).then(function (response) {
+               axios.get(`/delete/${acc}`).then(function (response) {
                     console.log(response);
                }).catch(function (error) {
                     console.log(error);
