@@ -1,2 +1,2 @@
 # instaHot
- instaHot bot
+This is a simple instagram bot, that is scraping
