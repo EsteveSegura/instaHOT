@@ -51,14 +51,14 @@ async function getCustomFeedNative(ig) {
                }
                //SIMILARS
                
-               
-               if (Math.random() > 0.75) {
+               /*
+               if (Math.random() > 0.80) {
                     await createSimilar() //Generar similar cada mins
                     console.log("Generando similar")
                } else {
                     console.log("NO generando similar")
                }
-               
+               */
 
                let updateAcc = await accActions.updateAcc(objFeed.acc, objFeed.id, objFeed.url, _fullFeed, chain)
 
@@ -75,7 +75,7 @@ async function getCustomFeedNative(ig) {
 
           }
      }
-     return fullFeed
+     
 }
 
 
@@ -162,6 +162,6 @@ async function createSimilar() {
      let ig = await login(); // MOVE THIS TOP
      while (true) {
           await setAntiBanMode(ig); // MOVE THIS TOP
-          let feed = await getCustomFeedNative(ig);
+          await getCustomFeedNative(ig);
      }
 })();
